@@ -1,0 +1,6 @@
+dashboard:
+  label: Dashboard
+  welcome: Welcome, %firstname %lastname!
+  redirect: You will be redirected to the WebStore immediately. If not, click the button below.
+  redirect_button: Go to WebStore
+  not_granted: The current user account is not activated for the shop.

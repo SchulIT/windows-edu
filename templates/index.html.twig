@@ -1,0 +1,29 @@
+{% extends "main.html.twig" %}
+
+{% block title %}{{ 'dashboard.label'|trans }}{% endblock %}
+
+{% block meta %}
+    {% if redirect_url is not null %}
+        <meta http-equiv="refresh" content="10;url={{ redirect_url }}" />
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <div class="contentbox">
+        <h4>{{ 'dashboard.welcome'|trans({'%firstname%': user.firstname, '%lastname%': user.lastname}) }}</h4>
+
+        {% if redirect_url is not null %}
+            <p>
+                {{ 'dashboard.redirect'|trans }}
+            </p>
+
+            <a href="{{ redirect_url }}" class="btn btn-primary btn-sm">
+                {{ 'dashboard.redirect_button'|trans }}
+            </a>
+        {% else %}
+            <p>
+                {{ 'dashboard.not_granted'|trans }}
+            </p>
+        {% endif %}
+    </div>
+{% endblock %}

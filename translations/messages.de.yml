@@ -1,0 +1,6 @@
+dashboard:
+  label: Übersicht
+  welcome: Willkommen, %firstname% %lastname%!
+  redirect: Du wirst automatisch zum WebStore weitergeleitet. Falls das nicht funktioniert, klicke den untenstehenden Button.
+  redirect_button: Zum WebStore
+  not_granted: Das aktuelle Benutzerkonto ist derzeit nicht für den Shop freigeschaltet.

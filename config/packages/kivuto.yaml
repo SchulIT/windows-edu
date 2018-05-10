@@ -1,0 +1,8 @@
+kivuto:
+  endpoint: "%env(KIVUTO_ENDPOINT)%"
+  secret_key: "%env(KIVUTO_SECRET_KEY)%"
+  guzzle: guzzle.client.kivuto
+  logger: logger
+  data_resolver: kivuto.data_resolver
+  fake:
+    enabled: true
