@@ -4,6 +4,6 @@ twig:
     strict_variables: '%kernel.debug%'
 
     globals:
-      config: '@app.common.config'
+      config: '@SchoolIT\CommonBundle\Twig\ConfigVariable'
       user: '@App\Twig\UserVariable'
       profile_url: "%env(IDP_PROFILE_URL)%"

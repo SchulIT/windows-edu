@@ -3,6 +3,6 @@ kivuto:
   secret_key: "%env(KIVUTO_SECRET_KEY)%"
   guzzle: guzzle.client.kivuto
   logger: logger
-  data_resolver: kivuto.data_resolver
+  data_resolver: App\Kivuto\DataResolver
   fake:
     enabled: true

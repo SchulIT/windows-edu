@@ -25,34 +25,12 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-    # SAML stuff
-    saml.user_mapper:
-      class: App\Security\User\UserMapper
+    LightSaml\SpBundle\Security\User\UsernameMapperInterface:
+        alias: lightsaml_sp.username_mapper.simple
 
-    saml.user_updater:
-      class: App\Security\User\UserUpdater
-      arguments:
-        - "@doctrine.orm.entity_manager"
-        - "@saml.user_mapper"
-        - "@logger"
 
-    saml.user_creator:
-      class: App\Security\User\UserCreator
-      arguments:
-        - "@doctrine.orm.entity_manager"
-        - "@saml.user_mapper"
-        - "@lightsaml_sp.username_mapper.simple"
 
-    saml.attribute_mapper:
-      class: App\Security\User\AttributeMapper
-
-    # Kivuto
-    kivuto.data_resolver:
-      class: App\Kivuto\DataResolver
-      arguments:
-        - "@security.token_storage"
-
-     # Menu
+    # Menu
     app.menu:
       class: App\Menu\Builder
       arguments:
@@ -61,3 +39,8 @@ services:
         - "@knp_menu.factory"
       tags:
         - { name: knp_menu.menu_builder, method: mainMenu, alias: mainMenu }
+
+    # Session storage
+    Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler:
+        arguments:
+            - '%env(DATABASE_URL)%'

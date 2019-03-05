@@ -3,12 +3,12 @@ light_saml_symfony_bridge:
         entity_id: "%env(SAML_ENTITY_ID)%"
         credentials:
             -
-                certificate: "%kernel.project_dir%/certs/saml.crt"
-                key:         "%kernel.project_dir%/certs/saml.key"
+                certificate: "%kernel.project_dir%/saml/sp.crt"
+                key:         "%kernel.project_dir%/saml/sp.key"
                 password:    ~
     party:
         idp:
             files:
-                - "%kernel.project_dir%/idp/sso.xml"
+                - "%kernel.project_dir%/saml/idp.xml"
     store:
-        id_state: saml.id_store
+        id_state: SchoolIT\CommonBundle\Store\IdStore

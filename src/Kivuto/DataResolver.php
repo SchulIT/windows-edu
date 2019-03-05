@@ -2,15 +2,15 @@
 
 namespace App\Kivuto;
 
-use SchoolIT\KivutoBundle\User\DataResolverInterface;
 use LightSaml\SpBundle\Security\Authentication\Token\SamlSpToken;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use SchoolIT\KivutoBundle\User\DataResolverInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class DataResolver implements DataResolverInterface {
 
     private $tokenStorage;
 
-    public function __construct(TokenStorage $tokenStorage) {
+    public function __construct(TokenStorageInterface $tokenStorage) {
         $this->tokenStorage = $tokenStorage;
     }
 

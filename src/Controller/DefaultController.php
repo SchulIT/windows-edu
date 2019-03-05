@@ -4,10 +4,10 @@ namespace App\Controller;
 
 use App\Security\Voter\ShopVoter;
 use SchoolIT\KivutoBundle\Client\KivutoClientInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Annotation\Route;
 
-class DefaultController extends Controller {
+class DefaultController extends AbstractController {
     /**
      * @Route("/", name="dashboard")
      * @Route("/start")
