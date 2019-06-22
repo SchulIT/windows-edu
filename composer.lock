@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a8e591750ed5022fbb1aee952d48bd2a",
+    "content-hash": "f2ac5525ed14add79fb2952cd927b53a",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -2689,16 +2689,16 @@
         },
         {
             "name": "schoolit/common-bundle",
-            "version": "1.2.6",
+            "version": "1.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SchulIT/common-bundle.git",
-                "reference": "ebd4007bce43796be4c8566467f41963262eabfe"
+                "reference": "74899c75961b01181c40bd1af47c5163ca8d216f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SchulIT/common-bundle/zipball/ebd4007bce43796be4c8566467f41963262eabfe",
-                "reference": "ebd4007bce43796be4c8566467f41963262eabfe",
+                "url": "https://api.github.com/repos/SchulIT/common-bundle/zipball/74899c75961b01181c40bd1af47c5163ca8d216f",
+                "reference": "74899c75961b01181c40bd1af47c5163ca8d216f",
                 "shasum": ""
             },
             "require": {
@@ -2733,7 +2733,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2019-04-22T16:34:10+00:00"
+            "time": "2019-06-22T11:47:17+00:00"
         },
         {
             "name": "schoolit/kivuto-bundle",
@@ -6207,6 +6207,7 @@
                 "MIT"
             ],
             "description": "A pack for Symfony Encore",
+            "abandoned": "symfony/webpack-encore-bundle",
             "time": "2018-07-16T10:15:28+00:00"
         },
         {

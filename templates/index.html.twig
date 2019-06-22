@@ -8,22 +8,32 @@
     {% endif %}
 {% endblock %}
 
+{% block breadcrumb %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">{{ 'dashboard.label'|trans }}</li>
+    </ol>
+{% endblock %}
+
 {% block content %}
-    <div class="contentbox">
-        <h4>{{ 'dashboard.welcome'|trans({'%firstname%': user.firstname, '%lastname%': user.lastname}) }}</h4>
+    <h4>{{ 'dashboard.welcome'|trans({'%firstname%': user.firstname, '%lastname%': user.lastname}) }}</h4>
 
-        {% if redirect_url is not null %}
-            <p>
-                {{ 'dashboard.redirect'|trans }}
-            </p>
+    {% if redirect_url is not null %}
+        <div class="bs-callout bs-callout-success">
+            <h4>{{ 'dashboard.redirect.header'|trans }}</h4>
+        </div>
+        <p>
+            {{ 'dashboard.redirect.info'|trans }}
+        </p>
 
-            <a href="{{ redirect_url }}" class="btn btn-primary btn-sm">
-                {{ 'dashboard.redirect_button'|trans }}
-            </a>
-        {% else %}
+        <a href="{{ redirect_url }}" class="btn btn-primary btn-sm">
+            {{ 'dashboard.redirect.button'|trans }}
+        </a>
+    {% else %}
+        <div class="bs-callout bs-callout-danger">
+            <h4>{{ 'error.label'|trans }}</h4>
             <p>
                 {{ 'dashboard.not_granted'|trans }}
             </p>
-        {% endif %}
-    </div>
+        </div>
+    {% endif %}
 {% endblock %}
