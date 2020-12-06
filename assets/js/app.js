@@ -1,3 +1,5 @@
 require('../css/app.scss');
 
-require('bootstrap.native');
+global.bsn = require('bootstrap.native');
+require('../../vendor/schulit/common-bundle/Resources/assets/js/polyfill');
+require('../../vendor/schulit/common-bundle/Resources/assets/js/menu');

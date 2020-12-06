@@ -2,6 +2,7 @@
 
 namespace App\Twig;
 
+use App\Entity\User;
 use LightSaml\SpBundle\Security\Authentication\Token\SamlSpToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
@@ -26,20 +27,27 @@ class UserVariable {
         return $token;
     }
 
-    public function getStudentId() {
-        return $this->getToken()->getAttribute('student_id');
+    private function getUser(): User {
+        $token = $this->getToken();
+        $user = $token->getUser();
+
+        if(!$user instanceof User) {
+            throw new \Exception(sprintf('Token must be of type "%s" ("%s" given)', User::class, get_class($user)));
+        }
+
+        return $user;
     }
 
     public function getFirstname() {
-        return $this->getToken()->getAttribute('firstname');
+        return $this->getUser()->getFirstname();
     }
 
     public function getLastname() {
-        return $this->getToken()->getAttribute('lastname');
+        return $this->getUser()->getLastname();
     }
 
     public function getEmailAddress() {
-        return $this->getToken()->getAttribute('email');
+        return $this->getUser()->getEmail();
     }
 
     public function getServices() {

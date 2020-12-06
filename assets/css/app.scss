@@ -1,6 +1,8 @@
 $enable-shadows: true;
 $enable-gradients: true;
 
+// Import SCSS from custom
+@import "custom/*.scss";
 
 // Import Bootstrap
 @import '../../node_modules/bootstrap/scss/bootstrap';
@@ -12,8 +14,17 @@ $enable-gradients: true;
 @import '../../node_modules/@fortawesome/fontawesome-free/scss/brands';
 
 // Import SchoolIT design
-@import '../../vendor/schoolit/common-bundle/Resources/assets/css/layout.scss';
-@import '../../vendor/schoolit/common-bundle/Resources/assets/css/additions.scss';
+@import '../../vendor/schulit/common-bundle/Resources/assets/css/variables.scss';
+@import '../../vendor/schulit/common-bundle/Resources/assets/css/layout.scss';
+@import '../../vendor/schulit/common-bundle/Resources/assets/css/additions.scss';
+@import '../../vendor/schulit/common-bundle/Resources/assets/css/div-tables.scss';
+@import '../../node_modules/bootstrap-darkmode/darktheme';
+@import '../../vendor/schulit/common-bundle/Resources/assets/css/dark/variables.scss';
+@import '../../vendor/schulit/common-bundle/Resources/assets/css/dark/layout';
 
 // Import Bootstrap 4 Card Tables
 @import '../../node_modules/bootstrap4-card-tables/src/bootstrap4-card-tables';
+@import '../../vendor/schulit/common-bundle/Resources/assets/css/nested-card-tables.scss';
+
+// Import SCSS from overrides
+@import "overrides/*.scss";

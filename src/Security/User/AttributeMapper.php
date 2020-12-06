@@ -2,27 +2,22 @@
 
 namespace App\Security\User;
 
-use LightSaml\ClaimTypes;
 use LightSaml\SpBundle\Security\Authentication\Token\SamlSpResponseToken;
 use LightSaml\SpBundle\Security\User\AttributeMapperInterface;
+use SchulIT\CommonBundle\Saml\ClaimTypes;
 
 class AttributeMapper implements AttributeMapperInterface {
-
-    const INTERAL_ID_ASSERTION_NAME = 'urn:internal-id';
 
     public function getAttributes(SamlSpResponseToken $token) {
         return [
             'name_id' => $token->getResponse()->getFirstAssertion()->getSubject()->getNameID()->getValue(),
-            'email' => $this->getValue($token, ClaimTypes::EMAIL_ADDRESS),
-            'student_id' => $this->getValue($token, static::INTERAL_ID_ASSERTION_NAME),
-            'firstname' => $this->getValue($token, ClaimTypes::GIVEN_NAME),
-            'lastname' => $this->getValue($token, ClaimTypes::SURNAME),
+            'internal_id' => $this->getValue($token, ClaimTypes::EXTERNAL_ID),
             'services' => $this->getServices($token)
         ];
     }
 
     private function getServices(SamlSpResponseToken $token) {
-        $values = $this->getValues($token, 'urn:services');
+        $values = $this->getValues($token, ClaimTypes::SERVICES);
 
         $services = [ ];
 

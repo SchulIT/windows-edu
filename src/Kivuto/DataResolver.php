@@ -2,8 +2,10 @@
 
 namespace App\Kivuto;
 
+use App\Entity\User;
+use Exception;
 use LightSaml\SpBundle\Security\Authentication\Token\SamlSpToken;
-use SchoolIT\KivutoBundle\User\DataResolverInterface;
+use SchulIT\KivutoBundle\User\DataResolverInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class DataResolver implements DataResolverInterface {
@@ -16,28 +18,42 @@ class DataResolver implements DataResolverInterface {
 
     /**
      * @return SamlSpToken
-     * @throws \Exception
+     * @throws Exception
      */
     private function getToken() {
         $token = $this->tokenStorage->getToken();
 
         if(!$token instanceof SamlSpToken) {
-            throw new \Exception(sprintf('Token must be of type "%s" ("%s" given)', SamlSpToken::class, get_class($token)));
+            throw new Exception(sprintf('Token must be of type "%s" ("%s" given)', SamlSpToken::class, get_class($token)));
         }
 
         return $token;
     }
 
+    /**
+     * @return User
+     */
+    private function getUser(): User {
+        $token = $this->getToken();
+        $user = $token->getUser();
+
+        if(!$user instanceof User) {
+            throw new Exception(sprintf('User must be of type "%s" ("%s" given)', User::class, get_class($user)));
+        }
+
+        return $user;
+    }
+
     public function getUsername() {
-        return $this->getToken()->getUsername();
+        return $this->getUser()->getKivutoEmail();
     }
 
     public function getFirstname() {
-        return $this->getToken()->getAttribute('firstname');
+        return $this->getUser()->getKivutoFirstname();
     }
 
     public function getLastname() {
-        return $this->getToken()->getAttribute('lastname');
+        return $this->getUser()->getKivutoLastname();
     }
 
     public function getAcademicStatus() {
@@ -45,6 +61,6 @@ class DataResolver implements DataResolverInterface {
     }
 
     public function getEmail() {
-        return $this->getToken()->getAttribute('email');
+        return $this->getUser()->getKivutoEmail();
     }
 }

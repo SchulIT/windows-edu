@@ -2,7 +2,12 @@ dashboard:
   label: Übersicht
   welcome: Willkommen, %firstname% %lastname%!
   redirect:
-    header:
-    info: Du wirst automatisch zum WebStore weitergeleitet. Falls das nicht funktioniert, klicke den untenstehenden Button.
-    button: Zum WebStore
+    label: Weiterleitung zum Store
+    privacy: "Zur Anmeldung am Store werden folgende Daten übertragen:"
+    button: Bestätigen und fortfahren
+    attributes:
+      firstname: Vorname
+      lastname: Nachname
+      email: E-Mail Adresse
+      ip: IP-Adresse
   not_granted: Das aktuelle Benutzerkonto ist derzeit nicht für den Shop freigeschaltet.

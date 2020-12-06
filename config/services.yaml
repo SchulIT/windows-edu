@@ -25,22 +25,54 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-    LightSaml\SpBundle\Security\User\UsernameMapperInterface:
-        alias: lightsaml_sp.username_mapper.simple
-
-
-
-    # Menu
-    app.menu:
-      class: App\Menu\Builder
+    # SESSIONS
+    Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler:
       arguments:
-        - "@security.token_storage"
-        - "@security.access.decision_manager"
-        - "@knp_menu.factory"
+        $pdoOrDsn: '%env(DATABASE_URL)%'
+
+    # SAML
+    LightSaml\SpBundle\Security\User\UsernameMapperInterface:
+      alias: lightsaml_sp.username_mapper.simple
+
+    SchulIT\CommonBundle\Command\CreateCertificateCommand:
+      arguments:
+        $types:
+          saml:
+            keyFile: '%sp_cert_key%'
+            certFile: '%sp_cert_file%'
+          oauth2:
+            keyFile: '%kernel.project_dir%/oauth/oauth.key'
+            certFile: '%kernel.project_dir%/oauth/oauth.pub'
+
+    SchulIT\CommonBundle\EventSubscriber\SamlExceptionSubscriber:
+      arguments:
+        $retryRoute: 'lightsaml_sp.login'
+        $loggedInRoute: 'dashboard'
+
+    # MENU
+    App\Menu\Builder:
+      arguments:
+        $idpProfileUrl: '%env(IDP_PROFILE_URL)%'
       tags:
         - { name: knp_menu.menu_builder, method: mainMenu, alias: mainMenu }
+        - { name: knp_menu.menu_builder, method: userMenu, alias: userMenu }
+        - { name: knp_menu.menu_builder, method: adminMenu, alias: adminMenu }
+        - { name: knp_menu.menu_builder, method: settingsMenu, alias: settingsMenu }
+        - { name: knp_menu.menu_builder, method: servicesMenu, alias: servicesMenu }
+        - { name: knp_menu.menu_builder, method: systemMenu, alias: systemMenu }
+        - { name: knp_menu.menu_builder, method: notificationsMenu, alias: notificationsMenu }
 
-    # Session storage
-    Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler:
-        arguments:
-            - '%env(DATABASE_URL)%'
+    SchulIT\CommonBundle\Menu\Voter:
+      tags:
+        - { name: knp_menu.voter }
+
+    # MAPPER
+    App\Security\User\UserMapper:
+      arguments:
+        $firstnameAttributeName: '%env(KIVUTO_FIRSTNAME)%'
+        $lastnameAttributeName: '%env(KIVUTO_LASTNAME)%'
+        $emailAttributeName: '%env(KIVUTO_EMAIL)%'
+
+    # DARK MODE:
+    SchulIT\CommonBundle\DarkMode\DarkModeManagerInterface:
+      class: App\DarkMode\DarkModeManager
