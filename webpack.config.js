@@ -19,7 +19,7 @@ Encore
 
     // uncomment if you use Sass/SCSS files
     .enableSassLoader(function(options) {
-        options.importer = GlobImporter();
+        options.sassOptions.importer = GlobImporter();
     })
     .enablePostCssLoader()
 
