@@ -6,26 +6,22 @@ use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use LightSaml\Model\Protocol\Response;
 use LightSaml\SpBundle\Security\User\UserCreatorInterface;
-use LightSaml\SpBundle\Security\User\UsernameMapperInterface;
 use Ramsey\Uuid\Uuid;
 use SchulIT\CommonBundle\Saml\ClaimTypes;
+use Symfony\Component\Security\Core\User\UserInterface;
 
-class UserCreator implements UserCreatorInterface {
+readonly class UserCreator implements UserCreatorInterface {
 
-    private $em;
-    private $userMapper;
-    private $usernameMapper;
-
-    public function __construct(EntityManagerInterface $em, UserMapper $userMapper, UsernameMapperInterface $usernameMapper) {
-        $this->em = $em;
-        $this->userMapper = $userMapper;
-        $this->usernameMapper = $usernameMapper;
+    public function __construct(private EntityManagerInterface $em, private UserMapper $userMapper)
+    {
     }
 
     /**
-     * @inheritDoc
+     * @param Response $response
+     * @return UserInterface|null
      */
-    public function createUser(Response $response) {
+    public function createUser(Response $response): ?UserInterface {
+        // Second chance: map user by ID
         $id = $response->getFirstAssertion()
             ->getFirstAttributeStatement()
             ->getFirstAttributeByName(ClaimTypes::ID)
@@ -40,4 +36,6 @@ class UserCreator implements UserCreatorInterface {
 
         return $user;
     }
+
+
 }

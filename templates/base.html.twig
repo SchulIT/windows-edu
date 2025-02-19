@@ -2,8 +2,15 @@
 
 {% block css %}
     <link rel="stylesheet" href="{{ asset('build/app.css') }}" type="text/css" />
+
+    {% set customCSS = customCSS() %}
+    {% if customCSS is not empty %}
+        <style>
+            {{ customCSS }}
+        </style>
+    {% endif %}
 {% endblock %}
 
 {% block javascript %}
-    <script src="{{ asset('build/app.js') }}"></script>
+<script src="{{ asset('build/app.js') }}"></script>
 {% endblock %}

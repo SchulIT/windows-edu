@@ -5,32 +5,19 @@ namespace App\Menu;
 use App\Entity\User;
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
-use LightSaml\SpBundle\Security\Authentication\Token\SamlSpToken;
-use SchulIT\CommonBundle\DarkMode\DarkModeManagerInterface;
-use SchulIT\CommonBundle\Helper\DateHelper;
+use LightSaml\SpBundle\Security\Http\Authenticator\SamlToken;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class Builder {
+readonly class Builder {
 
-    private $factory;
-    private $tokenStorage;
-    private $authorizationChecker;
-    private $dateHelper;
-    private $translator;
-
-    private $idpProfileUrl;
-
-    public function __construct(FactoryInterface $factory, TokenStorageInterface $tokenStorage,
-                                AuthorizationCheckerInterface $authorizationChecker, DateHelper $dateHelper,
-                                TranslatorInterface $translator, string $idpProfileUrl) {
-        $this->factory = $factory;
-        $this->tokenStorage = $tokenStorage;
-        $this->authorizationChecker = $authorizationChecker;
-        $this->dateHelper = $dateHelper;
-        $this->translator = $translator;
-        $this->idpProfileUrl = $idpProfileUrl;
+    public function __construct(private FactoryInterface $factory,
+                                private TokenStorageInterface $tokenStorage,
+                                private AuthorizationCheckerInterface $authorizationChecker,
+                                private TranslatorInterface $translator,
+                                #[Autowire(env: 'IDP_PROFILE_URL')] private string $idpProfileUrl) {
     }
 
     public function mainMenu(array $options): ItemInterface {
@@ -38,7 +25,7 @@ class Builder {
             ->getToken()->getUser();
 
         $menu = $this->factory->createItem('root')
-            ->setChildrenAttribute('class', 'navbar-nav mr-auto');
+            ->setChildrenAttribute('class', 'navbar-nav me-auto');
 
         $menu->addChild('dashboard.label', [
             'route' => 'dashboard'
@@ -64,6 +51,11 @@ class Builder {
                 ->setExtra('menu-container', '#submenu')
                 ->setExtra('pull-right', true);
 
+            $menu->addChild('settings.branding.label', [
+                'route' => 'branding_settings'
+            ])
+                ->setExtra('icon', 'fa-solid fa-cogs');
+
             $menu->addChild('logs.label', [
                 'route' => 'admin_logs'
             ])
@@ -82,11 +74,17 @@ class Builder {
 
         $user = $this->tokenStorage->getToken()->getUser();
 
-        if($user === null || !$user instanceof User) {
+        if($this->tokenStorage->getToken() === null) {
             return $menu;
         }
 
-        $displayName = $user->getUsername();
+        $user = $this->tokenStorage->getToken()->getUser();
+
+        if(!$user instanceof User) {
+            return $menu;
+        }
+
+        $displayName = $user->getUserIdentifier();
 
         $userMenu = $menu->addChild('user', [
             'label' => $displayName
@@ -100,7 +98,8 @@ class Builder {
             'uri' => $this->idpProfileUrl
         ])
             ->setLinkAttribute('target', '_blank')
-            ->setExtra('icon', 'far fa-address-card');
+            ->setExtra('icon', 'fas fa-address-card');
+
 
         $menu->addChild('label.logout', [
             'route' => 'logout',
@@ -120,7 +119,7 @@ class Builder {
 
         $token = $this->tokenStorage->getToken();
 
-        if($token instanceof SamlSpToken) {
+        if($token instanceof SamlToken) {
             $menu = $root->addChild('services', [
                 'label' => ''
             ])

@@ -10,9 +10,6 @@ common:
     logo: "%env(APP_LOGO)%"
     small_logo: "%env(APP_SMALLLOGO)%"
     logo_link: 'dashboard'
-  locales: "%locales%"
+  locales:
+    - de
   menu: mainMenu
-  disable:
-    cron: true
-    mail: true
-    messenger: true

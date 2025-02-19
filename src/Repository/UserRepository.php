@@ -5,12 +5,8 @@ namespace App\Repository;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 
-class UserRepository implements UserRepositoryInterface {
-    private $em;
-
-    public function __construct(EntityManagerInterface $em) {
-        $this->em = $em;
-    }
+readonly class UserRepository implements UserRepositoryInterface {
+    public function __construct(private EntityManagerInterface $em) { }
 
 
     public function findOneById(int $id): ?User {

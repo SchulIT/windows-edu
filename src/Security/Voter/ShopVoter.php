@@ -8,25 +8,16 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 class ShopVoter extends Voter {
 
-    const REDIRECT = 'shop.redirect';
+    const string REDIRECT = 'shop.redirect';
 
-    private $decisionManager;
-
-    public function __construct(AccessDecisionManagerInterface $decisionManager) {
-        $this->decisionManager = $decisionManager;
+    public function __construct(private readonly AccessDecisionManagerInterface $decisionManager) {
     }
 
-    /**
-     * @inheritDoc
-     */
-    protected function supports($attribute, $subject) {
+    protected function supports($attribute, $subject): bool {
         return $attribute === static::REDIRECT;
     }
 
-    /**
-     * @inheritDoc
-     */
-    protected function voteOnAttribute($attribute, $subject, TokenInterface $token) {
+    protected function voteOnAttribute($attribute, $subject, TokenInterface $token): bool {
         if($token->getUser() === null) {
             return false;
         }

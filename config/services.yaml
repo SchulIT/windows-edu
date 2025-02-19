@@ -1,6 +1,9 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 
+imports:
+  - { resource: version.yaml }
+
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -34,25 +37,23 @@ services:
     LightSaml\SpBundle\Security\User\UsernameMapperInterface:
       alias: lightsaml_sp.username_mapper.simple
 
+    LightSaml\Store\Id\IdStoreInterface:
+      class: SchulIT\CommonBundle\Store\IdStore
+
     SchulIT\CommonBundle\Command\CreateCertificateCommand:
       arguments:
         $types:
           saml:
             keyFile: '%sp_cert_key%'
             certFile: '%sp_cert_file%'
-          oauth2:
-            keyFile: '%kernel.project_dir%/oauth/oauth.key'
-            certFile: '%kernel.project_dir%/oauth/oauth.pub'
 
     SchulIT\CommonBundle\EventSubscriber\SamlExceptionSubscriber:
       arguments:
-        $retryRoute: 'lightsaml_sp.login'
+        $retryRoute: 'dashboard'
         $loggedInRoute: 'dashboard'
 
     # MENU
     App\Menu\Builder:
-      arguments:
-        $idpProfileUrl: '%env(IDP_PROFILE_URL)%'
       tags:
         - { name: knp_menu.menu_builder, method: mainMenu, alias: mainMenu }
         - { name: knp_menu.menu_builder, method: userMenu, alias: userMenu }
@@ -60,19 +61,24 @@ services:
         - { name: knp_menu.menu_builder, method: settingsMenu, alias: settingsMenu }
         - { name: knp_menu.menu_builder, method: servicesMenu, alias: servicesMenu }
         - { name: knp_menu.menu_builder, method: systemMenu, alias: systemMenu }
-        - { name: knp_menu.menu_builder, method: notificationsMenu, alias: notificationsMenu }
 
     SchulIT\CommonBundle\Menu\Voter:
       tags:
         - { name: knp_menu.voter }
 
-    # MAPPER
-    App\Security\User\UserMapper:
-      arguments:
-        $firstnameAttributeName: '%env(KIVUTO_FIRSTNAME)%'
-        $lastnameAttributeName: '%env(KIVUTO_LASTNAME)%'
-        $emailAttributeName: '%env(KIVUTO_EMAIL)%'
-
     # DARK MODE:
     SchulIT\CommonBundle\DarkMode\DarkModeManagerInterface:
       class: App\DarkMode\DarkModeManager
+
+    # KIVUTO
+    App\Kivuto\Client\KivutoClientInterface:
+      class: App\Kivuto\Client\KivutoClient
+
+    Faker\Generator:
+      factory: ['Faker\Factory', 'create', [ 'de' ]]
+
+when@dev:
+  services:
+    App\Kivuto\Client\KivutoClientInterface:
+      class: App\Kivuto\Client\FakeKivutoClient
+      autowire: true

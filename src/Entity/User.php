@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
@@ -9,146 +10,78 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity()
- * @UniqueEntity(fields={"username"})
- */
-class User implements UserInterface, \Serializable {
+#[ORM\Entity]
+#[UniqueEntity(fields: ['username'])]
+class User implements UserInterface {
 
     use IdTrait;
     use UuidTrait;
 
-    /**
-     * @ORM\Column(type="uuid")
-     * @var UuidInterface
-     */
-    private $idpId;
+    #[ORM\Column(type: 'uuid', unique: true)]
+    private UuidInterface $idpId;
 
-    /**
-     * @ORM\Column(type="string", unique=true)
-     * @var string
-     */
-    private $username;
+    #[ORM\Column(type: Types::STRING, unique: true)]
+    private string $username;
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     * @Assert\NotBlank(allowNull=true)
-     * @var string|null
-     */
-    private $firstname;
+    #[ORM\Column(type: Types::STRING, nullable: false)]
+    #[Assert\NotBlank]
+    private string $firstname;
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     * @Assert\NotBlank(allowNull=true)
-     * @var string|null
-     */
-    private $lastname;
+    #[ORM\Column(type: Types::STRING, nullable: false)]
+    #[Assert\NotBlank]
+    private string $lastname;
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     * @Assert\Email()
-     * @Assert\NotBlank(allowNull=true)
-     * @var string|null
-     */
-    private $email;
-
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     * @Assert\NotBlank()
-     * @var string|null
-     */
-    private $kivutoFirstname;
-
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     * @Assert\NotBlank()
-     * @var string|null
-     */
-    private $kivutoLastname;
-
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     * @Assert\NotBlank()
-     * @var string|null
-     */
-    private $kivutoEmail;
+    #[ORM\Column(type: Types::STRING, nullable: true)]
+    #[Assert\NotBlank(allowNull: true)]
+    #[Assert\Email]
+    private ?string $email;
 
     /**
      * @ORM\Column(type="json")
      * @var string[]
      */
-    private $roles = ['ROLE_USER'];
+    #[ORM\Column(type: Types::JSON, nullable: false)]
+    private array $roles = ['ROLE_USER'];
 
     public function __construct() {
         $this->uuid = Uuid::uuid4();
     }
 
-    /**
-     * @return UuidInterface|null
-     */
     public function getIdpId(): ?UuidInterface {
         return $this->idpId;
     }
 
-    /**
-     * @param UuidInterface $uuid
-     * @return User
-     */
     public function setIdpId(UuidInterface $uuid): User {
         $this->idpId = $uuid;
         return $this;
     }
 
-    /**
-     * @return int|null
-     */
     public function getId(): ?int {
         return $this->id;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getFirstname(): ?string {
+    public function getFirstname(): string {
         return $this->firstname;
     }
 
-    /**
-     * @param string|null $firstname
-     * @return User
-     */
-    public function setFirstname(?string $firstname): User {
+    public function setFirstname(string $firstname): User {
         $this->firstname = $firstname;
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getLastname(): ?string {
+    public function getLastname(): string {
         return $this->lastname;
     }
 
-    /**
-     * @param string|null $lastname
-     * @return User
-     */
-    public function setLastname(?string $lastname): User {
+    public function setLastname(string $lastname): User {
         $this->lastname = $lastname;
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getEmail(): ?string {
         return $this->email;
     }
 
-    /**
-     * @param string|null $email
-     * @return User
-     */
     public function setEmail(?string $email): User {
         $this->email = $email;
         return $this;
@@ -156,7 +89,6 @@ class User implements UserInterface, \Serializable {
 
     /**
      * @param string[] $roles
-     * @return User
      */
     public function setRoles(array $roles): User {
         $this->roles = $roles;
@@ -166,107 +98,33 @@ class User implements UserInterface, \Serializable {
     /**
      * @return string[]
      */
-    public function getRoles() {
+    public function getRoles(): array {
         return $this->roles;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getKivutoFirstname(): ?string {
-        return $this->kivutoFirstname;
-    }
-
-    /**
-     * @param string|null $kivutoFirstname
-     * @return User
-     */
-    public function setKivutoFirstname(?string $kivutoFirstname): User {
-        $this->kivutoFirstname = $kivutoFirstname;
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getKivutoLastname(): ?string {
-        return $this->kivutoLastname;
-    }
-
-    /**
-     * @param string|null $kivutoLastname
-     * @return User
-     */
-    public function setKivutoLastname(?string $kivutoLastname): User {
-        $this->kivutoLastname = $kivutoLastname;
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getKivutoEmail(): ?string {
-        return $this->kivutoEmail;
-    }
-
-    /**
-     * @param string|null $kivutoEmail
-     * @return User
-     */
-    public function setKivutoEmail(?string $kivutoEmail): User {
-        $this->kivutoEmail = $kivutoEmail;
-        return $this;
-    }
-
-    /**
-     * @param string $username
-     * @return User
-     */
     public function setUsername(string $username): User {
         $this->username = $username;
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getUsername() {
+    public function getUserIdentifier(): string {
         return $this->username;
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function getPassword() {
+    public function getPassword(): string {
         return '';
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function getSalt() {
-        return null;
-    }
+    public function eraseCredentials(): void { }
 
-    /**
-     * @inheritDoc
-     */
-    public function eraseCredentials() { }
-
-    /**
-     * @inheritDoc
-     */
-    public function serialize() {
+    public function serialize(): ?string {
         return serialize([
             $this->getId(),
-            $this->getUsername()
+            $this->getUserIdentifier()
         ]);
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function unserialize($serialized) {
-        list($this->id, $this->username) = unserialize($serialized);
+    public function unserialize(string $serialized): void {
+        [$this->id, $this->username] = unserialize($serialized);
     }
 }

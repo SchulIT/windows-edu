@@ -11,3 +11,14 @@ dashboard:
       email: E-Mail Adresse
       ip: IP-Adresse
   not_granted: Das aktuelle Benutzerkonto ist derzeit nicht für den Shop freigeschaltet.
+
+settings:
+  label: Einstellungen
+  branding:
+    label: Branding
+    css:
+      label: Benutzerdefiniertes CSS
+      help: Hier kann benutzerdefiniertes CSS eingebunden werden, um die Software nach eigenen Wünschen einzufärben.
+
+actions:
+  save: speichern

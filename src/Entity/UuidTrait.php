@@ -2,18 +2,14 @@
 
 namespace App\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Ramsey\Uuid\UuidInterface;
 
 trait UuidTrait {
+    #[ORM\Column(type: Types::STRING, length: 36, unique: true)]
+    private ?string $uuid;
 
-    /**
-     * @ORM\Column(type="uuid")
-     * @var UuidInterface
-     */
-    private $uuid;
-
-    public function getUuid(): UuidInterface {
+    public function getUuid(): ?string {
         return $this->uuid;
     }
 }
